@@ -1,0 +1,100 @@
+#include<stdio.h>
+#include<conio.h>
+#include<graphics.h>
+#include<math.h>
+void main(){
+int a[4],b[4];
+float xnew,ynew,m;
+int gd=DETECT,gm;
+int xa=100,ya=100,xb=300,yb=300,xl=10,yl=250,xh=250,yh=150;
+initgraph(&gd,&gm,"C:\\TC\\BGI");
+setcolor(5);
+line(xa,ya,xb,yb);
+setcolor(12);
+rectangle(xa,ya,xb,yb);
+m=(yb-ya)/(xa-xb);
+if(xa<xl)
+a[3]=1;
+else
+a[3]=0;
+
+if(xa>xh)
+a[2]=1;
+else
+a[2]=0;
+
+if(ya<yl)
+a[1]=1;
+else
+a[1]=0;
+
+if(ya>yh)
+a[0]=1;
+else
+a[0]=0;
+if(xb<xl)
+    a[3]=1;
+    else
+    a[3]=0;
+    
+    if(xb<xh)
+    a[2]=1;
+    else
+    a[2]=0;
+    
+    if(yb<yl)
+    a[1]=1;
+    else
+    a[1]=0;
+    if(yb>yh)
+    a[0]=1;
+    else
+    a[0]=0;
+printf("press any key to continue?");
+getch();
+if(a[0]==0&&a[1]==0&&a[2]==0&&a[3]==0&&b[0]==0&&b[1]==0&&b[2]==0&&b[3]==0){
+printf("No clipping");
+line(xa,ya,xb,yb);
+}
+else{
+if(a[0]&&b[0]||a[1]&&b[1]||a[2]&&b[2]||a[3]&&b[3]){
+clrscr();
+printf("Line discarded");
+rectangle(xl,yl,xh,yh);
+}
+else if(a[3]==1 && b[3]==0){
+ynew=(m*(xl-xa))+ya;
+setcolor(12);
+rectangle(xl,yl,xh,yh);
+setcolor(0);
+line(xa,ya,xb,yb);
+setcolor(12);
+line(xa,ynew,xb,yb);
+}
+else if(a[2]==1&&b[2]==0){
+ynew=(m*(xh-xa))+ya;
+setcolor(12);
+rectangle(xl,yl,xh,yh);
+setcolor(0);
+line(xa,ya,xb,yb);
+setcolor(12);
+line(xa,ynew,xb,yb);
+}
+else if(a[1]==1&&b[1]==0){
+xnew=xa+((yl-ya)/m);
+setcolor(0);
+line(xa,ya,xb,yb);
+setcolor(12);
+line(xnew,ya,xb,yb);
+}
+else if(a[0]==1&&b[0]==0){
+xnew=xa+((yh-ya)/m);
+setcolor(0);
+line(xa,ya,xb,yb);
+setcolor(12);
+line(xnew,ya,xb,yb);
+}
+}
+getch();
+closegraph();
+}

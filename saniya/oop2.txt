@@ -1,0 +1,34 @@
+#include<iostream.h>
+#include<stdio.h>
+#include<conio.h>
+#include<graphics.h>
+#Include<math.h>
+#include<dos.h>
+class walking{
+int x,y,public:
+void draw(int,int);
+void draw(int);
+};
+void walking::draw(int xmov){
+setbcolor(8);
+setfillstyle(1,14);
+setcolor(GREEN);
+line(0,400,639,400);
+secolor(WHITE)
+circle(30+xmov,280,20);
+line(30+xmov,300,30+xmov,350);
+line(30+xmov,310,70+xmov,330);
+if(xmov%2==0){
+line(30+xmov,350,50+xmov,400);
+line(30+xmov,350,10+xmov,400);
+line(30+xmov,310,10+xmov,350);
+
+}
+else{
+setcolor(WHITE);
+line(30+xmov,
+line(30+xmov,
+line(43+xmov,
+line(30+xmov,
+
+

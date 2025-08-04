@@ -1,0 +1,108 @@
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+class pizza{
+    int front,rear,q[5];
+    public:
+    pizza(){
+        front=-1;
+        rear=-1;
+    }
+    int isfull(){
+        if(front==0&&rear==4||front==rear+1)
+        return 1;
+        else
+        return 0;
+    }
+    int isempty(){
+        if(front==-1&&rear==-1)
+        return 1;
+        else
+        return 0;
+    }
+    void add(){
+        if(isfull()==0){
+            cout<<"Enter the pizza ID=";
+            if(front==-1&&rear==-1){
+                front=0;
+                rear=0;
+                cout<<q[rear];
+            }
+            else{
+                rear=(rear)%5;
+                cin>>q[rear];
+            }
+            char c;
+            cout<<"Do you wan to add order=";
+            cin>>c;
+            if(c=='y'||c=='Y')
+            add();
+        }
+        else{
+            cout<<"Orders are full";
+        }
+    }
+    void serve(){
+        if(isempty()==0){
+            if(front==rear){
+                cout<<"Order served is:"<<q[front];
+                front=-1;
+                rear=-1;
+            }
+            else{
+                cout<<"order served is:"<<q[front];
+                front=(front+1)%5;
+            }
+        }
+        else{
+            cout<<"\nOrder are empty";
+        }
+    }
+    
+    void display(){
+        if(isempty()==0){
+            for(int i=front;i!=rear;i=(i+1)%5){
+                cout<<q[i]<<"<-";
+            }
+            cout<<q[rear];
+        }
+        else{
+            cout<<"\norders are empty";
+        }
+    }
+    
+    void check(){
+        int ch;
+        cout<<"\n****PIZZA PARLOUR****";
+        cout<<"\n1:add \n2:display \n3:serve \n4:exit \nEnter your choice= ";
+        cin>>ch;
+        switch(ch){
+            case 1:
+            add();
+            break;
+            case 2:
+            display();
+            break;
+            case 3:
+            serve();
+            break;
+            case 4:
+            exit(0);
+            default:
+            cout<<"Invalid choice";
+            
+        check();
+        }
+        char ch1;
+        cout<<"\nDo you want to continue";
+        cin>>ch1;
+        if(ch1=='y'||ch1=='Y')
+        check();
+    }
+};
+
+int main(){
+    pizza p1;
+    p1.check();
+    return 0;
+}

@@ -1,0 +1,117 @@
+#include<iostream.h>
+#include<stdio.h>
+#include<conio.h>
+#include<graphics.h>
+#include<math.h>
+#include<dos.h>
+class trans{
+public:
+float tranco[3][3];
+float orico[3][3];
+float scalco[3][3];
+float rotco[3][3];
+void drtri(float[3][3]);
+void tran(int,int,float[3][3]);
+void scal(float,float,float[3][3]);
+void rot(float,float[3][3]);
+};
+void trans::drtri(float co[3][3]){
+line(co[0][0],co[1][0],co[0][2],co[1][1]);
+line(co[0][1],co[1][1],co[0][1],co[1][2]);
+line(co[0][2],co[1][2],co[0][0],co[1][0]);
+}
+void trans::tran(int tx,int ty,float orico[3][3]){
+cout<<"Enter tx,ty=";
+cin>>tx>>ty;
+for(int i=0;i<3;i++){
+tranco[0][i]=orico[0][i]+tx;
+tranco[1][i]=orico[1][i]+ty;
+tranco[2][i]=1;
+}
+for(int i=0;i<3;i++){
+for(int j=0;j<3;j++){
+cout<<tranco[i][j]<<" ";
+}
+cout<<endl;
+}
+}
+void trans::scal(float sx,float sy,float orico[3][3]){
+cout<<"Enter sx sy=";
+cin>>sx>>sy;
+for(int i=0;i<3;i++){
+scalco[0][i]=orico[0][i]*sx;
+scalco[1][i]=orico[1][i]*sy;
+scalco[2][i]=1;
+}
+for(int i=0;i<3;i++){
+for(int j=0;j<3;j++){
+cout<<scaleco[i][j]<<" ";
+}
+cout<<endl;
+}
+}
+void trans::rot(float theta,float orico[3][3]){
+cout<<"Enter theta=";
+cin>>theta;
+theta=theta*(3.14/180);
+float i,j,rx,ry;
+for(i=0;i<3;i++){
+rotco[0][i]=orico[0][i]*cos(theta)-orico[1][i]*sin(theta);
+rotco[1][i]=orico[0][i]*sin(theta)+orico[1][i]*cos(theta);
+rotco[2][i]=1;
+}
+for(int i=0;i<3;i++){
+for(int j=0;j<3;j++){
+cout<<rotco[i][j]<<" ";
+}
+cout<<endl;
+}
+}
+int main(){
+float sx,sy,orico[3][3],theta;
+int tx,ty,i,j,ch;
+int gd=DETECT,gm;
+initgraph(&gd,&gm,"C:\\TC\\BGI");
+trans t;
+cout<<"Enter coor=";
+for(j=0;j<2;j++){
+for(i=0;i<3;i++){
+cin>>orico[i][j];
+}
+oico[2][j]=1;
+}
+cout<<"original matri=";
+for(i=0;i<3;i++){
+for(j=0;j<3;j++){
+cout<<orico[i][j]<<" ";
+}
+cout<<endl;
+}
+t.drtri(orico[3][3]);
+do{
+cout<<"\n1:translation\n2:scaling\n3:rotation\n4:exit";
+cout<<"\nEnter your choice=";
+cin>>ch;
+switch(ch){
+case 1:
+t.tran(tx,ty,orico[3][3]);
+t.drtri(orico[3][3]);
+break;
+case 2:
+t.scal(sx,sy,orico[3][3]);
+t.drtri(orico[3][3]);
+break;
+case 3:
+t.rot(theta,orico[3][3]);
+t.drtri(orico[3][3]);
+break;
+case 4:
+exit(0);
+default:
+cout<<"INvalid choice";
+}
+}while(ch!=4);
+getch();
+closegraph();
+return 0;
+}

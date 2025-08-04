@@ -1,0 +1,141 @@
+#include<iostream>
+#include<stdlib.h>
+#define size 5
+using namespace std;
+class deque{
+    int que[size];
+    public:
+    int front,rear;
+    int qfull();
+    int qempty();
+    int insert_rear(int item);
+    int insert_front(int item);
+    int del_front();
+    int del_rear();
+    void display();
+    deque(){
+        front=-1;
+        rear=-1;
+        for(int i=0;i<size;i++){
+            que[i]=-1;
+        }
+    }
+};
+int deque::qfull(){
+    if(rear==size-1)
+    return 1;
+    else
+    return 0;
+}
+int deque::qempty(){
+    if((front>rear)||front==-1&&rear==-1)
+    return 1;
+    else
+    return 0;
+}
+int deque::insert_rear(int item){
+    if(front==-1&&rear==-1)
+    front++;
+    que[++rear]=item;
+    return rear;
+}
+int deque::insert_front(int item){
+    int i,j;
+    if(front==-1)
+    front++;
+    i=front-1;
+    while(i>=0){
+        que[i+1]=que[i];
+        i--;
+    }
+    j=rear;
+    while(j>=front){
+        que[j+1]=que[j];
+        j--;
+    }
+    rear++;
+    que[front]=item;
+    return front;
+}
+int deque::del_front(){
+    int item;
+    if(front==-1)
+    front++;
+    item=que[front];
+    que[front]=-1;
+    front++;
+    return item;
+}
+int deque::del_rear(){
+    int item;
+    item=que[rear];
+    que[rear]=-1;
+    return item;
+}
+void deque::display(){
+    int i;
+    cout<<"Queue=";
+    for(i=0;i<=rear;i++){
+        cout<<" "<<que[i];
+    }
+}
+
+int main(){
+    int ch,item;
+    char ans;
+    deque obj;
+    do{
+    cout<<"\n1:insert at rear \n2:insert at front  \n3:delete at rear \n4:delete at front \n5:display \n6:exit";
+    cout<<"\nEnter your choice=";
+    cin>>ch;
+    switch(ch){
+        case 1:
+        if(obj.qfull()){
+            cout<<"Queue is full";
+        }
+        else{
+            cout<<"Enter item=";
+            cin>>item;
+            obj.rear=obj.insert_rear(item);
+        }
+        break;
+        case 2:
+        if(obj.qfull()){
+            cout<<"Queue is full";
+        }
+        else{
+            cout<<"Enter item=";
+            cin>>item;
+            obj.front=obj.insert_front(item);
+        }
+        break;
+        case 3:
+        if(obj.qempty()){
+            cout<<"Queue is empty";
+        }
+        else{
+            item=obj.del_rear();
+            cout<<"item is deleted"<<item;
+        }
+        break;
+        case 4:
+        if(obj.qempty()){
+            cout<<"Queue is empty";
+        }
+        else{
+            item=obj.del_front();
+            cout<<"item is deleted"<<item;
+        }
+        break;
+        case 5:
+        obj.display();
+        break;
+        case 6:
+        cout<<"End of the program";
+        exit(0);
+    }
+    cout<<"\nDo you want to continue?";
+    cin>>ans;
+}while(ans=='y'||ans=='Y');
+return 0;
+}
