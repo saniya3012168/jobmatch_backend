@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: jobmatcher-api
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: ADZUNA_APP_ID
+        value: your_adzuna_app_id
+      - key: ADZUNA_APP_KEY
+        value: your_adzuna_app_key
