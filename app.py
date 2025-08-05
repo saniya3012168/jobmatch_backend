@@ -1,35 +1,56 @@
 from flask import Flask, request, jsonify
-from job_matcher import calculate_match_score
+import os
+from resume_parser import extract_text_from_pdf, extract_skills
+from job_api import get_jobs
+from email_service import send_eligibility_email
 
+UPLOAD_FOLDER = 'uploads'
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Static required skills (can come from a DB or file)
-required_skills = ['python', 'flask', 'sql', 'machine learning']
+# Replace with your Adzuna credentials
+ADZUNA_APP_ID = "your_adzuna_app_id"
+ADZUNA_APP_KEY = "your_adzuna_app_key"
 
 @app.route('/')
 def home():
-    return "Job Recruiter Agent Backend is Running!"
+    return "✅ Job Matcher API is running."
 
-@app.route('/match', methods=['POST'])
-def match_candidate():
-    try:
-        data = request.get_json()
-        name = data.get("name")
-        email = data.get("email")
-        experience = int(data.get("experience", 0))
-        skills = data.get("skills", "")
+@app.route('/upload', methods=['POST'])
+def upload_resume():
+    if 'resume' not in request.files or 'email' not in request.form:
+        return jsonify({"error": "Missing resume file or email"}), 400
 
-        score, status = calculate_match_score(skills, experience, required_skills)
+    file = request.files['resume']
+    user_email = request.form['email']
+    candidate_name = request.form.get('name', 'Candidate')
 
-        return jsonify({
-            "name": name,
-            "email": email,
-            "match_score": score,
-            "status": status
-        })
+    if file.filename == '':
+        return jsonify({"error": "No selected file"}), 400
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    # Save uploaded file
+    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+    file.save(filepath)
+
+    # Extract skills
+    text = extract_text_from_pdf(filepath)
+    skills = extract_skills(text)
+
+    # Get job matches
+    jobs = get_jobs(skills, ADZUNA_APP_ID, ADZUNA_APP_KEY)
+
+    # Send email only if jobs are found
+    if jobs:
+        send_eligibility_email(candidate_email=user_email, candidate_name=candidate_name, skills=skills, job_matches=jobs)
+        message = "Match found! Email sent."
+    else:
+        message = "No job matches found."
+
+    return jsonify({
+        "message": message,
+        "extracted_skills": skills,
+        "job_matches": jobs[:3]  # return top 3
+    })
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080)
+    app.run(debug=True)
